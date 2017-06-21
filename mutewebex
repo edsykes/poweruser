@@ -1,0 +1,23 @@
+on run {input, parameters}
+	-- Click the “Button” button.
+	set timeoutSeconds to 2.0
+	set uiScript to "click UI Element 8 of splitter group 1 of splitter group 1 of window \"Cisco WebEx Meeting Center\" of application process \"Meeting Center\""
+	my doWithTimeout(uiScript, timeoutSeconds)
+	return input
+end run
+
+on doWithTimeout(uiScript, timeoutSeconds)
+	set endDate to (current date) + timeoutSeconds
+	repeat
+		try
+			run script "tell application \"System Events\"
+" & uiScript & "
+end tell"
+			exit repeat
+		on error errorMessage
+			if ((current date) > endDate) then
+				error "Can not " & uiScript
+			end if
+		end try
+	end repeat
+end doWithTimeout
